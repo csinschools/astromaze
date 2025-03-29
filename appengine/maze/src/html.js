@@ -80,6 +80,7 @@ Maze.html.toolbox_ = function(level) {
 <block type="maze_moveForward"></block>
 <block type="maze_turn"><field name="DIR">turnLeft</field></block>
 <block type="maze_turn"><field name="DIR">turnRight</field></block>
+<block type="maze_repeat"></block>
 `;
   if (level > 2) {
     xml += '<block type="maze_forever"></block>\n';

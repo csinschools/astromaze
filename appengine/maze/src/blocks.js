@@ -17,6 +17,7 @@ goog.require('Blockly.JavaScript');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldNumber');
 goog.require('BlocklyGames');
 
 
@@ -154,7 +155,7 @@ Maze.Blocks.init = function() {
     // Block for repeat loop.
     {
       "type": "maze_forever",
-      "message0": `${BlocklyGames.getMsg('Maze.repeatUntil', false)}%1%2${BlocklyGames.getMsg('Maze.doCode', false)}%3`,
+      "message0": `${BlocklyGames.getMsg('Maze.repeat', false)}%1%2${BlocklyGames.getMsg('Maze.doCode', false)}%3`,
       "args0": [
         {
           "type": "field_image",
@@ -171,9 +172,35 @@ Maze.Blocks.init = function() {
         }
       ],
       "previousStatement": null,
+      "nextStatement": null,
       "colour": LOOPS_HUE,
       "tooltip": BlocklyGames.getMsg('Maze.whileTooltip', false),
     },
+
+    // Block for repeat loop.
+    {
+      "type": "maze_repeat",
+      "message0": `${BlocklyGames.getMsg('Maze.repeat', false)}%1%2${BlocklyGames.getMsg('Maze.doCode', false)}%3`,
+      "args0": [
+        {
+          "type": "field_number",
+          "name": "N",
+          "value": 1,
+          "check": "Number",
+        },
+        {
+          "type": "input_dummy",
+        },
+        {
+          "type": "input_statement",
+          "name": "DO",
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": LOOPS_HUE,
+      "tooltip": BlocklyGames.getMsg('Maze.repeatTooltip', false),
+    },    
   ]);
 };
 
@@ -211,4 +238,15 @@ Blockly.JavaScript['maze_forever'] = function(block) {
         `'block_id_${block.id}'`) + branch;
   }
   return `while (notDone()) {\n${branch}}\n`;
+};
+
+Blockly.JavaScript['maze_repeat'] = function(block) {
+  // Generate JavaScript for repeat loop.
+  let branch = Blockly.JavaScript.statementToCode(block, 'DO');
+  let iterations = Number(block.getFieldValue('N'));
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+        `'block_id_${block.id}'`) + branch;
+  }
+  return `for (i = 0; i < ${iterations};i++) {\n${branch}}\n`;
 };

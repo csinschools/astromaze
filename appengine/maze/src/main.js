@@ -78,8 +78,10 @@ const SKINS = [
     crashType: CRASH_FALL,
   },
 ];
+
+// changing default to skin 1 (astronaut)
 const SKIN_ID =
-    BlocklyGames.getIntegerParamFromUrl('skin', 0, SKINS.length - 1);
+    BlocklyGames.getIntegerParamFromUrl('skin', 1, SKINS.length - 1);
 const SKIN = SKINS[SKIN_ID];
 
 /**
@@ -102,7 +104,7 @@ const map = [
   [0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 1, 3, 0, 0],
+  [0, 0, 2, 1, 1, 3, 0],
   [0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0]],
 // Level 2.
@@ -279,6 +281,14 @@ const tile_SHAPES = {
  * Milliseconds between each animation frame.
  */
 let stepSpeed;
+
+let framesPerStep = 16;
+
+function setSpeed(speed) {
+  // by default, times were relative to 4 frames per step
+  // speed was actually time per step ( so 1 / speed )
+  stepSpeed = speed / (framesPerStep / 4);
+}
 
 let start_;
 let finish_;
@@ -486,12 +496,15 @@ function init() {
 
   drawMap();
 
+  // no default blocks!
+  /*
   const defaultXml =
       '<xml>' +
         '<block movable="' + (BlocklyGames.LEVEL !== 1) + '" ' +
         'type="maze_moveForward" x="70" y="70"></block>' +
       '</xml>';
   BlocklyInterface.loadBlocks(defaultXml, false);
+  */
 
   // Locate the start and finish squares.
   for (let y = 0; y < ROWS; y++) {
@@ -816,11 +829,11 @@ function reset(first) {
     pegmanD = startDirection + 1;
     scheduleFinish(false);
     pidList.push(setTimeout(function() {
-      stepSpeed = 100;
+      setSpeed(100);
       schedule([pegmanX, pegmanY, pegmanD * 4],
                [pegmanX, pegmanY, pegmanD * 4 - 4]);
       pegmanD++;
-    }, stepSpeed * 5));
+    }, stepSpeed * (framesPerStep + 1)));
   } else {
     pegmanD = startDirection;
     displayPegman(pegmanX, pegmanY, pegmanD * 4);
@@ -1035,10 +1048,10 @@ function execute() {
 
   // Fast animation if execution is successful.  Slow otherwise.
   if (result === ResultType.SUCCESS) {
-    stepSpeed = 100;
+    setSpeed(100);
     log.push(['finish', null]);
   } else {
-    stepSpeed = 150;
+    setSpeed(150);    
   }
 
   // log now contains a transcript of all the user's actions.
@@ -1114,7 +1127,7 @@ function animate() {
       setTimeout(BlocklyCode.congratulations, 1000);
   }
 
-  pidList.push(setTimeout(animate, stepSpeed * 5));
+  pidList.push(setTimeout(animate, stepSpeed * (framesPerStep + 1)));
 }
 
 /**
@@ -1154,27 +1167,19 @@ function updatePegSpin_(e) {
  * @param {!Array<number>} startPos X, Y and direction starting points.
  * @param {!Array<number>} endPos X, Y and direction ending points.
  */
+// attempting to make animation smoother by doubling halving deltas and intervals
 function schedule(startPos, endPos) {
-  const deltas = [(endPos[0] - startPos[0]) / 4,
-                (endPos[1] - startPos[1]) / 4,
-                (endPos[2] - startPos[2]) / 4];
-  displayPegman(startPos[0] + deltas[0],
-                startPos[1] + deltas[1],
-                constrainDirection16(startPos[2] + deltas[2]));
-  pidList.push(setTimeout(function() {
-      displayPegman(startPos[0] + deltas[0] * 2,
-          startPos[1] + deltas[1] * 2,
-          constrainDirection16(startPos[2] + deltas[2] * 2));
-    }, stepSpeed));
-  pidList.push(setTimeout(function() {
-      displayPegman(startPos[0] + deltas[0] * 3,
-          startPos[1] + deltas[1] * 3,
-          constrainDirection16(startPos[2] + deltas[2] * 3));
-    }, stepSpeed * 2));
-  pidList.push(setTimeout(function() {
-      displayPegman(endPos[0], endPos[1],
-          constrainDirection16(endPos[2]));
-    }, stepSpeed * 3));
+  const deltas = [(endPos[0] - startPos[0]) / framesPerStep,
+                (endPos[1] - startPos[1]) / framesPerStep,
+                (endPos[2] - startPos[2]) / framesPerStep];
+
+  for (let i = 1; i <= framesPerStep; i++) {
+    pidList.push(setTimeout(function() {
+      displayPegman(startPos[0] + deltas[0] * i,
+          startPos[1] + deltas[1] * i,
+          constrainDirection16(startPos[2] + deltas[2] * i));
+    }, stepSpeed * (i - 1)));     
+  }
 }
 
 /**
@@ -1260,7 +1265,7 @@ function scheduleFinish(sound) {
   if (sound) {
     BlocklyInterface.workspace.getAudioManager().play('win', 0.5);
   }
-  stepSpeed = 150;  // Slow down victory animation a bit.
+  setSpeed(150); // Slow down victory animation a bit.
   pidList.push(setTimeout(function() {
       displayPegman(pegmanX, pegmanY, 18);
     }, stepSpeed));
@@ -1281,6 +1286,7 @@ function scheduleFinish(sound) {
  */
 function displayPegman(x, y, d, opt_angle) {
   const pegmanIcon = BlocklyGames.getElementById('pegman');
+  // setting the coords in the sprite sheet - there is 1 of 16 rotation images to clip
   pegmanIcon.setAttribute('x', x * SQUARE_SIZE - d * PEGMAN_WIDTH + 1);
   pegmanIcon.setAttribute('y', SQUARE_SIZE * (y + 0.5) - PEGMAN_HEIGHT / 2 - 8);
   if (opt_angle) {

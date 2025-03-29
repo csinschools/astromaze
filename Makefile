@@ -2,7 +2,7 @@
 # Definitions
 ##############################
 
-REQUIRED_BINS = svn wget java python
+REQUIRED_BINS = svn wget java python3
 
 ##############################
 # Rules
@@ -11,42 +11,42 @@ REQUIRED_BINS = svn wget java python
 all: deps games
 
 index: common
-	python build/compress.py index
+	python3 build/compress.py index
 
 puzzle: common
-	python build/compress.py puzzle
+	python3 build/compress.py puzzle
 
 maze: common
-	python build/compress.py maze
+	python3 build/compress.py maze
 
 bird: common
-	python build/compress.py bird
+	python3 build/compress.py bird
 
 turtle: common
-	python build/compress.py turtle
+	python3 build/compress.py turtle
 
 movie: common
-	python build/compress.py movie
+	python3 build/compress.py movie
 
 music: common
-	python build/compress.py music
+	python3 build/compress.py music
 
 pond-tutor: common
-	python build/compress.py pond/tutor
+	python3 build/compress.py pond/tutor
 
 pond-duck: common
-	python build/compress.py pond/duck
+	python3 build/compress.py pond/duck
 
 gallery: common
-	python build/compress.py gallery
+	python3 build/compress.py gallery
 
 games: index puzzle maze bird turtle movie music pond-tutor pond-duck gallery
 
 common:
 	@echo "Converting messages.js to JSON for Translatewiki."
-	python build/messages_to_json.py
+	python3 build/messages_to_json.py
 	@echo "Converting JSON from Translatewiki to message files."
-	python build/json_to_js.py
+	python3 build/json_to_js.py
 	@echo
 
 deps:
@@ -57,17 +57,22 @@ deps:
 	mv -f compiler.jar build/third-party-downloads/closure-compiler.jar;
 
 	mkdir -p appengine/third-party
+	#mkdir -p appengine/third-party/ace
 	wget -N https://unpkg.com/@babel/standalone@7.14.8/babel.min.js
 	mv babel.min.js appengine/third-party/
 	@# GitHub doesn't support git archive, so download files using svn.
-	svn export --force https://github.com/ajaxorg/ace-builds/trunk/src-min-noconflict/ appengine/third-party/ace
-	mkdir -p appengine/third-party/blockly
-	svn export --force https://github.com/NeilFraser/blockly-for-BG/trunk/ appengine/third-party/blockly
-	svn export --force https://github.com/CreateJS/SoundJS/trunk/lib/ appengine/third-party/SoundJS
+	#wget -r -p -nv https://raw.githubusercontent.com/ajaxorg/ace-builds/tree/9ce7fb79ceb84db4e1421a2e972c5f84d0f95d95/src-min-noconflict -P appengine/third-party/ace
+	#mkdir -p appengine/third-party/blockly
+	#wget -r -p -nv https://github.com/NeilFraser/blockly-for-BG -P appengine/third-party/blockly
+	mkdir -p appengine/third-party/SoundJS
+	#wget -r -p -nv https://github.com/CreateJS/SoundJS/tree/master/lib -P appengine/third-party/SoundJS
 	cp third-party/base.js appengine/third-party/
 	cp -R third-party/soundfonts appengine/third-party/
 
-	svn export --force https://github.com/NeilFraser/JS-Interpreter/trunk/ appengine/third-party/JS-Interpreter
+	#mkdir -p appengine/third-party/JS-Interpreter
+	#wget -r -p -nv https://github.com/NeilFraser/JS-Interpreter -P appengine/third-party/JS-Interpreter
+
+
 	@# Compile JS-Interpreter using SIMPLE_OPTIMIZATIONS because the Music game needs to mess with the stack.
 	java -jar build/third-party-downloads/closure-compiler.jar\
 	  --language_out ECMASCRIPT5\
