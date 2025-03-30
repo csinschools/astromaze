@@ -1,7 +1,7 @@
 {
   "Games.name": {
     "desc": "The project name.",
-    "msg": "Blockly Games"
+    "msg": "Astromaze"
   },
   "Games.puzzle": {
     "desc": "title - Specifies that this is Blockly's '''Puzzle''' game.  Use the word for a jigsaw puzzle.\n{{Identical|Puzzle}}",
@@ -9,7 +9,7 @@
   },
   "Games.maze": {
     "desc": "title - Specifies that this is Blockly's '''Maze''' game.\n{{Identical|Maze}}",
-    "msg": "Maze"
+    "msg": "The Astronaut Needs Your Help!"
   },
   "Games.bird": {
     "desc": "title - Specifies that this is Blockly's '''Bird''' game.\n{{Identical|Bird}}",

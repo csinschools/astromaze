@@ -65,7 +65,6 @@ ${BlocklyGames.html.doneDialog()}
 ${BlocklyGames.html.abortDialog()}
 ${BlocklyGames.html.storageDialog()}
 
-${Maze.html.helpDialogs_()}
 `;
 };
 

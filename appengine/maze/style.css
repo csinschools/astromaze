@@ -4,6 +4,7 @@
 }
 #visualization {
   position: relative;
+  zoom: 150%;
 }
 #capacityBubble {
   position: absolute;

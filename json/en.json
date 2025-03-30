@@ -1,12 +1,12 @@
 {
 	"@metadata": {
-		"lastupdated": "2025-03-28 16:43:40.126931",
+		"lastupdated": "2025-03-30 23:33:35.530868",
 		"locale": "en",
 		"messagedocumentation": "qqq"
 	},
-	"Games.name": "Blockly Games",
+	"Games.name": "Astromaze",
 	"Games.puzzle": "Puzzle",
-	"Games.maze": "Maze",
+	"Games.maze": "The Astronaut Needs Your Help!",
 	"Games.bird": "Bird",
 	"Games.turtle": "Turtle",
 	"Games.movie": "Movie",

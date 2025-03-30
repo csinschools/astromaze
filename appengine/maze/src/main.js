@@ -32,6 +32,7 @@ goog.require('Maze.html');
 
 BlocklyGames.storageName = 'maze';
 
+// sets the capacity (max number of blocks) per level!
 const MAX_BLOCKS =
     [Infinity, Infinity, 2, 5, 5, 5, 5, 10, 7, 10][BlocklyGames.LEVEL - 1];
 
@@ -470,8 +471,8 @@ function init() {
   const visualization = BlocklyGames.getElementById('visualization');
   const onresize = function(_e) {
     const top = visualization.offsetTop;
-    blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
-    blocklyDiv.style.left = rtl ? '10px' : '420px';
+    blocklyDiv.style.top = Math.max(10, 20 + top - window.pageYOffset) + 'px';
+    blocklyDiv.style.left = rtl ? '10px' : '620px';
     blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
   };
   window.addEventListener('scroll', function() {
