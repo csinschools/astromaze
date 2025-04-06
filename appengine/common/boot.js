@@ -10,6 +10,8 @@
  */
 'use strict';
 
+let urlVersion = '0.0.1';
+
 // Redirect to new domain.
 if (location.host === 'blockly-games.appspot.com') {
   location.replace('https://blockly.games' +
@@ -69,7 +71,7 @@ if (location.host === 'blockly-games.appspot.com') {
   if (debug) {
     script.src = 'generated/msg/' + lang + '.js';
   } else {
-    script.src = appName + '/generated/msg/' + lang + '.js';
+    script.src = appName + '/generated/msg/' + lang + '.js?v=' + urlVersion;
   }
   script.type = 'text/javascript';
   document.head.appendChild(script);
@@ -78,7 +80,7 @@ if (location.host === 'blockly-games.appspot.com') {
   if (debug) {
     script.src = appName + '/generated/uncompressed.js';
   } else {
-    script.src = appName + '/generated/compressed.js';
+    script.src = appName + '/generated/compressed.js?v=' + urlVersion;
   }
   script.type = 'text/javascript';
   document.head.appendChild(script);

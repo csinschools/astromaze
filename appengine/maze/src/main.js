@@ -498,6 +498,7 @@ function init() {
   drawMap();
 
   // no default blocks!
+  // TODO: add "start" block
   /*
   const defaultXml =
       '<xml>' +
@@ -825,16 +826,18 @@ function reset(first) {
   pegmanX = start_.x;
   pegmanY = start_.y;
 
+  // don't play initial animation
+  
   if (first) {
     // Opening animation.
     pegmanD = startDirection + 1;
-    scheduleFinish(false);
+    //scheduleFinish(false);
     pidList.push(setTimeout(function() {
       setSpeed(100);
       schedule([pegmanX, pegmanY, pegmanD * 4],
                [pegmanX, pegmanY, pegmanD * 4 - 4]);
       pegmanD++;
-    }, stepSpeed * (framesPerStep + 1)));
+    }, stepSpeed)); //, stepSpeed * (framesPerStep + 1)));
   } else {
     pegmanD = startDirection;
     displayPegman(pegmanX, pegmanY, pegmanD * 4);
@@ -1168,7 +1171,6 @@ function updatePegSpin_(e) {
  * @param {!Array<number>} startPos X, Y and direction starting points.
  * @param {!Array<number>} endPos X, Y and direction ending points.
  */
-// attempting to make animation smoother by doubling halving deltas and intervals
 function schedule(startPos, endPos) {
   const deltas = [(endPos[0] - startPos[0]) / framesPerStep,
                 (endPos[1] - startPos[1]) / framesPerStep,
@@ -1266,7 +1268,7 @@ function scheduleFinish(sound) {
   if (sound) {
     BlocklyInterface.workspace.getAudioManager().play('win', 0.5);
   }
-  setSpeed(150); // Slow down victory animation a bit.
+  setSpeed(300); // Slow down victory animation a bit.
   pidList.push(setTimeout(function() {
       displayPegman(pegmanX, pegmanY, 18);
     }, stepSpeed));
