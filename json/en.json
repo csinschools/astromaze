@@ -1,12 +1,12 @@
 {
 	"@metadata": {
-		"lastupdated": "2025-03-30 23:33:35.530868",
+		"lastupdated": "2025-04-06 16:18:04.206891",
 		"locale": "en",
 		"messagedocumentation": "qqq"
 	},
 	"Games.name": "Astromaze",
 	"Games.puzzle": "Puzzle",
-	"Games.maze": "The Astronaut Needs Your Help!",
+	"Games.maze": "Guide the Astronaunt!",
 	"Games.bird": "Bird",
 	"Games.turtle": "Turtle",
 	"Games.movie": "Movie",

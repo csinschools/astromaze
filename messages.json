@@ -9,7 +9,7 @@
   },
   "Games.maze": {
     "desc": "title - Specifies that this is Blockly's '''Maze''' game.\n{{Identical|Maze}}",
-    "msg": "The Astronaut Needs Your Help!"
+    "msg": "Guide the Astronaunt!"
   },
   "Games.bird": {
     "desc": "title - Specifies that this is Blockly's '''Bird''' game.\n{{Identical|Bird}}",
